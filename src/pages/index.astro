@@ -1,9 +1,11 @@
 ---
-const products = [
-  { icon: '🌷', title: 'Ramos frescos', text: 'Composiciones hechas a mano para regalar o alegrar tu casa.' },
-  { icon: '🌿', title: 'Plantas y aromáticas', text: 'Verde para tu hogar, tu balcón y tus pequeños rituales diarios.' },
-  { icon: '🍵', title: 'Herbolario', text: 'Infusiones, mezclas y productos naturales escogidos con cariño.' },
-];
+import { getCollection } from 'astro:content';
+
+const products = await getCollection('productos');
+const productCards = await Promise.all(products.map(async (product) => ({
+  ...product,
+  Content: (await product.render()).Content,
+})));
 ---
 
 <html lang="es">
@@ -22,7 +24,7 @@ const products = [
     <main id="inicio">
       <section class="hero wrap"><div class="hero-copy"><p class="eyebrow">Flores · plantas · bienestar</p><h1>Un rincón natural para <em>regalar belleza.</em></h1><p class="lead">Ramos con alma, plantas que acompañan y pequeños tesoros del herbolario para cuidar de ti y de los tuyos.</p><div class="actions"><a class="button" href="#flores">Descubre la tienda <span>→</span></a><a class="text-link" href="#contacto">Cuéntanos qué necesitas</a></div></div><div class="hero-art" aria-label="Ilustración decorativa de flores y plantas"><div class="sun"></div><div class="leaf leaf-one">🌿</div><div class="flower">🌸</div><div class="leaf leaf-two">🌱</div><div class="art-card"><strong>Hecho a mano</strong><br />con calma y cariño</div></div></section>
       <section class="intro wrap" id="flores"><div><p class="eyebrow">Lo que encontrarás</p><h2>Naturalmente bonito.</h2></div><p>Seleccionamos cada flor, planta e infusión pensando en crear momentos especiales. Pasa a visitarnos o escríbenos y te ayudamos a elegir.</p></section>
-      <section class="cards wrap" id="herbolario">{products.map((product) => <article class="card"><div class="icon">{product.icon}</div><h3>{product.title}</h3><p>{product.text}</p><a href="#contacto">Ver más <span>↗</span></a></article>)}</section>
+      <section class="cards wrap" id="herbolario">{productCards.map((product) => <article class="card"><div class="icon">🌷</div><h3>{product.data.nombre}</h3><div class="description"><product.Content /></div><a href="#contacto">Consultar <span>↗</span></a></article>)}</section>
       <section class="quote wrap"><p>“Las flores no solo decoran: cuentan lo que a veces no sabemos decir.”</p><span>— Raíz y Pétalo</span></section>
       <section class="contact wrap" id="contacto"><div><p class="eyebrow">¿Hablamos?</p><h2>Te ayudamos a encontrar<br /><em>algo especial.</em></h2></div><div><p>Pedidos personalizados, regalos y recomendaciones naturales. Escríbenos sin compromiso.</p><a class="button" href="mailto:hola@raizypetalo.es">Escribir por email <span>→</span></a></div></section>
     </main>

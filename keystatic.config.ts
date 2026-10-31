@@ -21,6 +21,16 @@ export default config({
         descripcion: fields.markdoc({
           label: 'Descripción',
         }),
+        imagenes: fields.array(
+          fields.image({
+            label: 'Imagen',
+            directory: 'public/images/productos',
+            publicPath: '/images/productos/',
+          }),
+          {
+            label: 'Imágenes del producto',
+          },
+        ),
       },
     }),
   },
